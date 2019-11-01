@@ -16,7 +16,7 @@ public class ModelmapperTest {
 
     private ModelMapper mapper;
 
-    /*
+    /**
      *  Configuração necessária porque a camada de domínio está utilizando getters fluentes
      */
     @Before
@@ -32,6 +32,10 @@ public class ModelmapperTest {
 
     @Test
     public void mustMapDomainToDTO() {
+
+        /**
+         * Montar o objeto de domínio, a construção do objeto normalmente é feita por alguma ferramenta ORM
+         */
         Country country = new Country(1L, "Brasil", "BRA");
 
         Region region = new Region(1L, "RJ", "Rio de Janeiro", country);
@@ -71,8 +75,14 @@ public class ModelmapperTest {
                 "For those about to rock, we salute you"
         );
 
+        /**
+         * Convertendo do objeto de domínio com várias classes aninhadas para um DTO mais "desnormalizado"
+         */
         CompanyData dto = mapper.map(company, CompanyData.class);
 
+        /**
+         * Testando os atributos
+         */
         assertEquals(company.companyInfo().address().city().id(), dto.getAddress().getCity().getId());
         assertEquals(company.companyInfo().address().city().name(), dto.getAddress().getCity().getName());
 
@@ -92,7 +102,6 @@ public class ModelmapperTest {
         assertEquals(company.companyInfo().representative().personName().firstName(), dto.getRepresentative().getFirstName());
         assertEquals(company.companyInfo().representative().personName().lastName(), dto.getRepresentative().getLastName());
         assertEquals(company.companyInfo().representative().email(), dto.getRepresentative().getEmail());
-
 
         assertEquals(company.companyInfo().cnpj(), dto.getCnpj());
         assertEquals(company.companyInfo().companyName().tradingName(), dto.getTradingName());
